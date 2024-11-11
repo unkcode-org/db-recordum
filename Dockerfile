@@ -1,17 +1,20 @@
-# Dockerfile
-FROM golang:1.22-alpine
+# Use the official Go image as a base
+FROM --platform=linux/amd64 golang:1.22-alpine
 
-# Instala herramientas necesarias
+# Install necessary tools
 RUN apk update && apk add --no-cache mysql-client
 
-# Crea directorio de la aplicación
+# Set the working directory
 WORKDIR /app
 
-# Copia los archivos de la aplicación
+# Copy the source code into the container
 COPY . .
 
-# Compila la aplicación
+# Set environment variables for cross-compilation
+ENV GOOS=linux GOARCH=amd64
+
+# Build the Go application
 RUN go build -o db-recordum main.go
 
-# Comando para ejecutar el servicio
+# Command to run the application
 CMD ["/app/db-recordum"]
